@@ -17,7 +17,7 @@ docker run -i -v ${SRC_DIR}:/opt/src --rm golang:1.8-alpine \
 /bin/sh -xe -c "\
     apk --no-cache add bash tar;
     cd /opt/src; umask 0022;
-    for arch in amd64 arm arm64 ppc64le s390x; do \
+    for arch in amd64; do \
         CGO_ENABLED=0 GOARCH=\$arch ./build.sh ${BUILDFLAGS}; \
         for format in tgz; do \
             FILENAME=cni-plugins-\$arch-${TAG}.\$format; \
@@ -33,4 +33,4 @@ docker run -i -v ${SRC_DIR}:/opt/src --rm golang:1.8-alpine \
       for f in *.tgz; do sha256sum \$f > \$f.sha256; done;
       for f in *.tgz; do sha512sum \$f > \$f.sha512; done;
     cd ..
-    chown -R ${UID} ${OUTPUT_DIR} ${RELEASE_DIR}"
+    chown -R ${UID} ${OUTPUT_DIR} ${RELEASE_DIR} /opt/src"
